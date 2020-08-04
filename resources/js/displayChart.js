@@ -103,7 +103,6 @@ function onLoad() {
     dashboardUrl     = dashboardUrl.replace(/&&/, '');
     dashboardUrl     = dashboardUrl.replace(/&$/, '');
     $(document).on("click", "#fullscreenButton", function () {
-      alert(dashboardUrl);
       window.open(dashboardUrl, 'nexial-dashboard-fullscreen');
     });
   }
