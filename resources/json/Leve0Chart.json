@@ -1,0 +1,128 @@
+{
+    "dataLabel": {
+        "fontFamily": "Tahoma,Arial,Helvetica,sans-serif",
+        "fillStyle": "rgba(50,50,50,0.5)",
+        "fontWeight": "bold",
+        "fontSize": 9
+    },
+    "chartOptions": {
+        "responsive": true,
+        "maintainAspectRatio": false,
+        "title": {
+            "display": false,
+            "text": "Execution Summary",
+            "fontSize": 18,
+            "fontColor": "#000000"
+        },
+        "legend": {
+            "display": true,
+            "labels": {
+                "boxWidth": 10,
+                "padding": 25,
+                "usePointStyle": true
+            }
+        },
+        "scales": {
+            "yAxes": [
+                {
+                    "id": "y-axis-1",
+                    "scaleLabel": {
+                        "display": true,
+                        "labelString": "steps / %",
+                        "fontSize": 12
+                    },
+                    "ticks": {
+                        "fontSize": 10,
+                        "max": 500,
+                        "stepSize": 25,
+                        "min": 0
+                    }
+                },
+                {
+                    "id": "y-axis-2",
+                    "position": "right",
+                    "gridLines": {
+                        "drawOnChartArea": false
+                    },
+                    "scaleLabel": {
+                        "display": true,
+                        "labelString": "duration (min)",
+                        "fontSize": 12
+                    },
+                    "ticks": {
+                        "fontSize": 10,
+                        "max": 480,
+                        "stepSize": 30,
+                        "min": 0
+                    }
+                }
+            ],
+            "xAxes": [
+                {
+                    "scaleLabel": {
+                        "display": true,
+                        "labelString": "executions",
+                        "fontSize": 12
+                    },
+                    "ticks": {
+                        "fontSize": 10
+                    }
+                }
+            ]
+        }
+    },
+    "datasets": [
+        {
+            "label": "pass %",
+            "backgroundColor": "#aff",
+            "borderColor": "#09f",
+            "borderWidth": 2,
+            "tension": 0.3,
+            "fill": false,
+            "radius": 4,
+            "pointStyle": "rectRounded",
+            "yAxisID": "y-axis-1"
+        },
+        {
+            "label": "fail",
+            "borderColor": "rgba(100,10,10,1)",
+            "backgroundColor": "rgba(200,0,0,0.60)",
+            "borderWidth": 1,
+            "tension": 0.3,
+            "fill": true,
+            "yAxisID": "y-axis-1"
+        },
+        {
+            "label": "pass",
+            "borderColor": "rgba(10,100,10,0.5)",
+            "backgroundColor": "rgba(30,204,30,0.35)",
+            "borderWidth": 1,
+            "tension": 0.3,
+            "fill": true,
+            "yAxisID": "y-axis-1"
+        },
+        {
+            "label": "total",
+            "borderColor": "rgba(120,120,120,0.8)",
+            "backgroundColor": "rgba(0,0,0,0.80)",
+            "borderWidth": 2,
+            "tension": 0.3,
+            "fill": false,
+            "yAxisID": "y-axis-1"
+        },
+        {
+            "label": "duration (min)",
+            "borderColor": "rgba(225,30,225,1)",
+            "backgroundColor": "rgba(225,30,225,1)",
+            "borderWidth": 2,
+            "spanGaps": false,
+            "tension": 0.1,
+            "borderDash": [ 2, 2 ],
+            "pointBorderWidth": 1,
+            "pointRadius": 0,
+            "pointStyle": "dash",
+            "fill": false,
+            "yAxisID": "y-axis-2"
+        }
+    ]
+}

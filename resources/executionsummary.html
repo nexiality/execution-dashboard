@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link media="all" href="css/style.css" rel="stylesheet" rev="stylesheet"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+    <script src="./libraries/Chart.bundle.min.js"></script>
+    <script src="./libraries/jquery.min.js"></script>
+    <script src="./libraries/jquery.tablesorter.min.js"></script>
+    <script src="./libraries/UrlParamParser.js"></script>
+    <script src="./js/displayChart.js"></script>
+</head>
+<body onload="onLoad()">
+
+<div id="nexialResultSummary" class="nexial_result_summary">
+
+    <div id="sectionTitle" class="section_title"></div>
+
+    <div id="summarystats_div"></div>
+
+    <div id="nexial_result_chart_canvas" class="summary_chart">
+        <canvas id="nexial_result_chart"></canvas>
+    </div>
+
+    <div id="summaryTable" class="summary_table">
+        <table cellpadding="5" cellspacing="0" class="tablesorter" id="execution_results">
+            <thead>
+            <tr>
+                <th nowrap="true" id="link">links</th>
+                <th nowrap="true" class="sort-by" id="dateTime">date/time</th>
+                <th nowrap="true" class="sort-by" id="total">total</th>
+                <th nowrap="true" class="sort-by" id="pass">pass</th>
+                <th nowrap="true" class="sort-by" id="fail">fail</th>
+                <th nowrap="true" class="sort-by" id="passRate">pass%</th>
+                <th nowrap="true" class="sort-by" id="duration">duration</th>
+            </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

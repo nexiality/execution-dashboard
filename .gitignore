@@ -23,3 +23,7 @@
 hs_err_pid*
 
 *.iml
+/resources/iframe.html
+/**/*OLD*
+/**/*.*OLD
+/projects/agent-portal.smoke-qa/

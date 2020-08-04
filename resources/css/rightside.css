@@ -1,0 +1,35 @@
+#nexialResultSummary {
+    padding: 0;
+}
+
+#nexial_result_chart_canvas {
+    width: 100%;
+}
+
+.summary_chart {
+    width:      100%;
+    min-height: 350px !important;
+}
+
+#summaryTable {
+    width:      100%;
+    height:     200px;
+    overflow:   auto;
+    margin-top: 15px;
+}
+
+#execution_results {
+    width: 100%;
+}
+
+.icon_font_size {
+    font-size: 1em;
+}
+
+#summarystats_div label {
+    margin-left: 10px;
+}
+
+.summarystats_label {
+    margin-top: 5px;
+}
