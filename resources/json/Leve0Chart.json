@@ -25,7 +25,9 @@
         "scales": {
             "yAxes": [
                 {
-                    "id": "y-axis-1",
+                    "id": "y",
+                    "display": true,
+                    "position": "left",
                     "scaleLabel": {
                         "display": true,
                         "labelString": "steps / %",
@@ -39,7 +41,8 @@
                     }
                 },
                 {
-                    "id": "y-axis-2",
+                    "id": "y2",
+                    "display": true,
                     "position": "right",
                     "gridLines": {
                         "drawOnChartArea": false

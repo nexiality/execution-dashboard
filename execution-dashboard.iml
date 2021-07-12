@@ -2,8 +2,19 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/execution-summary/output" />
+      <excludeFolder url="file://$MODULE_DIR$/projects/agent-portal.smoke-uat" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Chart.js" level="application" />
+    <orderEntry type="library" name="datatables" level="application" />
+    <orderEntry type="library" name="w2ui-1.5.rc1" level="application" />
+    <orderEntry type="library" name="execution_summary" level="application" />
+    <orderEntry type="library" name="browser-metric.glossygreen" level="application" />
+    <orderEntry type="library" name="browser-metrics" level="application" />
+    <orderEntry type="library" name="clipboard" level="application" />
+    <orderEntry type="library" name="project" level="application" />
   </component>
 </module>

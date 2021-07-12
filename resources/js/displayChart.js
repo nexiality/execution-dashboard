@@ -1,42 +1,42 @@
 'use strict';
 
-var MAX_ITERATION_NAME_LENGTH = 40;
-var MAX_CARETX_VALUE          = 200;
-var MAX_DURATION              = 480;
-var MAX_TOTAL_STEPS           = 11520;
-var DEFAULT_BUILD_VALUE       = "";
+const MAX_ITERATION_NAME_LENGTH = 40;
+const MAX_CARETX_VALUE = 200;
+const MAX_DURATION = 480;
+const MAX_TOTAL_STEPS = 11520;
+const DEFAULT_BUILD_VALUE = "";
 
-var HTTP_METHODS = {
-  GET:     "GET",
-  HEAD:    "HEAD",
-  POST:    "POST",
-  PUT:     "PUT",
-  DELETE:  "DELETE",
-  TRACE:   "TRACE",
+const HTTP_METHODS = {
+  GET: "GET",
+  HEAD: "HEAD",
+  POST: "POST",
+  PUT: "PUT",
+  DELETE: "DELETE",
+  TRACE: "TRACE",
   OPTIONS: "OPTIONS",
   CONNECT: "CONNECT"
 };
 
-var URLS = {
+const URLS = {
   default: {
-    css:          '../resources/css/style.css',
+    css: '../resources/css/style.css',
     cssRightSide: '../resources/css/rightside.css',
-    level0Chart:  '../resources/json/Leve0Chart.json',
-    level1Chart:  '../resources/json/Level1Chart.json'
+    level0Chart: '../resources/json/Leve0Chart.json',
+    level1Chart: '../resources/json/Level1Chart.json'
   },
   project: {
-    config:      '',
-    css:         '',
+    config: '',
+    css: '',
     level0Chart: '',
     level1Chart: ''
   }
 };
 
 Number.prototype.toHHMMSS = function () {
-  var d = this;
-  var h = Math.floor(d / 3600);
-  var m = Math.floor(d % 3600 / 60);
-  var s = Math.floor(d % 3600 % 60);
+  let d = this;
+  let h = Math.floor(d / 3600);
+  let m = Math.floor(d % 3600 / 60);
+  let s = Math.floor(d % 3600 % 60);
   return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
 };
 
@@ -49,35 +49,35 @@ function configureURL(/*String*/url, /*Function*/successCallback, /*Function*/er
 }
 
 function applyCSS(/*Array*/url) {
-  if (!url || url === null) { return; }
+  if (!url) { return; }
 
-  for (var i = 0; i < url.length; i++) {
-    var cssUrl = url[i];
-    if (cssUrl && cssUrl !== null) {
+  for (let i = 0; i < url.length; i++) {
+    let cssUrl = url[i];
+    if (cssUrl) {
       $('head').append('<link rel="stylesheet" media="all" rev="stylesheet" href="' + cssUrl + '"/>');
     }
   }
 }
 
 function onLoad() {
-  var urlParams = $.parseParams();
+  let urlParams = $.parseParams();
 
-  var project = (urlParams && urlParams.project) || null;
+  let project = (urlParams && urlParams.project) || null;
   if (!project) {
     $('body').html('<h2 class="error">No project selected</h2>');
     return;
   }
 
-  var projectBase          = '../projects/' + project;
+  let projectBase          = '../projects/' + project;
   URLS.project.config      = projectBase + '/config.json';
   URLS.project.level0Chart = projectBase + '/json/Leve0Chart.json';
   URLS.project.level1Chart = projectBase + '/json/Level1Chart.json';
   URLS.project.css         = projectBase + '/css/style.css';
 
   // var isFullscreen = document.location.ancestorOrigins.length === 0;
-  var isFullscreen = window.location === window.parent.location;
+  let isFullscreen = window.location === window.parent.location;
 
-  var level = (urlParams && urlParams.level) || "0";
+  let level = (urlParams && urlParams.level) || "0";
   if (level === "0") {
     $('<div class="ctrl">' +
       (isFullscreen ? '' : '<input type="button" id="fullscreenButton" class="ctrl" value="Full Screen" />') +
@@ -89,14 +89,14 @@ function onLoad() {
     .prependTo($("#summaryTable"));
   }
 
-  var index = (urlParams && urlParams.index) || null;
+  let index = (urlParams && urlParams.index) || null;
 
   $(document).on("click", "#refreshButton", function () { window.location.reload(true); });
   $(document).on("click", "#backButton", function () {
     window.location = window.location.href.replace(/&?level=\d+/, '').replace(/&?index=\d+/, '');
   });
   if (!isFullscreen) {
-    var dashboardUrl = document.location.href;
+    let dashboardUrl = document.location.href;
     dashboardUrl     = dashboardUrl.replace(/orientation=[\w]+/, '');
     dashboardUrl     = dashboardUrl.replace(/level.+=[\d]+/, '');
     dashboardUrl     = dashboardUrl.replace(/index=[\d]+/, '');
@@ -107,32 +107,32 @@ function onLoad() {
     });
   }
 
-  var summaryUrl = location.toString().substring(0, location.toString().lastIndexOf('/')) +
+  let summaryUrl = location.toString().substring(0, location.toString().lastIndexOf('/')) +
                    '/../projects/' + project + '/summary_output.json';
   getFileData(summaryUrl,
     function (summary) {
-      var content          = typeof summary === "string" ? JSON.parse(summary) : summary;
-      var configURL        = level === "1" ? URLS.project.level1Chart : URLS.project.level0Chart;
-      var defaultConfigURL = level === "1" ? URLS.default.level1Chart : URLS.default.level0Chart;
+      let content          = typeof summary === "string" ? JSON.parse(summary) : summary;
+      let configURL        = level === "1" ? URLS.project.level1Chart : URLS.project.level0Chart;
+      let defaultConfigURL = level === "1" ? URLS.default.level1Chart : URLS.default.level0Chart;
       configureURL(configURL,
         function () {
           getFileData(configURL,
             function (chartConfig) {
-              var chartConfigData = typeof chartConfig === "string" ? JSON.parse(chartConfig) : chartConfig;
+              let chartConfigData = typeof chartConfig === "string" ? JSON.parse(chartConfig) : chartConfig;
               displayChartAndTable(chartConfigData, content, level, index);
             });
         },
         function () {
           getFileData(defaultConfigURL,
             function (chartConfig) {
-              var chartConfigData = typeof chartConfig === "string" ? JSON.parse(chartConfig) : chartConfig;
+              let chartConfigData = typeof chartConfig === "string" ? JSON.parse(chartConfig) : chartConfig;
               displayChartAndTable(chartConfigData, content, level, index);
             });
         });
     });
 
-  var displayOrientation = (urlParams && urlParams.orientation) || null;
-  var moreCss            = [];
+  let displayOrientation = (urlParams && urlParams.orientation) || null;
+  let moreCss = [];
   if (displayOrientation === 'rightside') { moreCss.push(URLS.default.cssRightSide); }
 
   configureURL(
@@ -156,22 +156,22 @@ function displayChartAndTable(/*Object*/chartConfig, summary, /*String*/level, i
   if (!level) { level = "0"; }
   if (!index) { index = null; }
 
-  var chartData;
-  var results = [];
+  let chartData;
+  let results = [];
 
-  var subtitle = '';
+  let subtitle = '';
   if (level === "0") {
-    results   = summary.results;
+    results = summary.results;
     chartData = parseResult(results, "0");
-    subtitle  = 'Latest: ' + chartData.labels[chartData.labels.length - 1];
+    subtitle = 'Latest: ' + chartData.labels[chartData.labels.length - 1];
     chartData = calculateExecutionStats(chartData);
     displayExecutionSummaryStats("summarystats_div", chartData);
   } else {
-    var executionResult = summary.results[index];
-    var key             = Object.keys(executionResult)[0];
-    var buildNo         = executionResult[key].plan.referenceData.buildnum == undefined ?
+    let executionResult = summary.results[index];
+    let key             = Object.keys(executionResult)[0];
+    let buildNo         = executionResult[key].plan.referenceData.buildnum == undefined ?
                           DEFAULT_BUILD_VALUE : executionResult[key].plan.referenceData.buildnum;
-    var totalScripts    = executionResult[key].scriptResults.length;
+    let totalScripts    = executionResult[key].scriptResults.length;
     subtitle            = key + "<br>Total Scripts:" + totalScripts +
                           ((buildNo === "") ? "" : "<br>Build:" + buildNo);
 
@@ -186,14 +186,13 @@ function displayChartAndTable(/*Object*/chartConfig, summary, /*String*/level, i
   displayChart('nexial_result_chart', chartData, chartConfig, level);
   displayTable('execution_results', chartData, results, level);
   $('table').tablesorter();
-
   $('#sectionTitle').append('<span class="lastMod">' + subtitle + '</span>');
 }
 
 function parseResult(nexialExecData, /*String*/level) {
   if (!level) { level = "0"; }
 
-  var chartData = {
+  let chartData = {
     labels:              [],
     shrinkedLabels:      [],
     buildNo:             [],
@@ -215,29 +214,28 @@ function parseResult(nexialExecData, /*String*/level) {
 
   if (level === "1") {
     nexialExecData.forEach(function (entry) {
-      var result = entry.iterations;
+      let result = entry.iterations;
       chartData.labels.push(entry.scriptName);
       chartData.downloadLinks.push(result.testScriptLink);
       chartData = getChartData(result, chartData, entry.scriptName);
     });
   } else {
     nexialExecData.forEach(function (entry) {
-      for (var key in entry) {
+      for (let key in entry) {
         chartData.labels.push(key);
         chartData.dateValues.push(key.substring(0, key.lastIndexOf(' ')));
-        var result = entry[key].plan ? entry[key].plan : entry[key].scriptResults;
-        if (!result) {
-          continue;
-        }
+        let result = entry[key].plan ? entry[key].plan : entry[key].scriptResults;
+        if (!result) { continue; }
+
         if (result === entry[key].scriptResults) {
           result.forEach(function (script) { chartData = getChartData(script, chartData); });
         } else {
-          var buildNo = (!result.referenceData || !result.referenceData.buildnum) ?
+          let buildNo = (!result.referenceData || !result.referenceData.buildnum) ?
                         DEFAULT_BUILD_VALUE : result.referenceData.buildnum;
           chartData.buildNo.push(buildNo);
           chartData.totalScripts.push(entry[key].scriptResults.length);
-          var exeOutputPath = entry[key].scriptResults[0].nestedExecutions[0].testScriptLink;
-          exeOutputPath     = exeOutputPath.substring(0, exeOutputPath.lastIndexOf('/'));
+          let exeOutputPath = entry[key].scriptResults[0].nestedExecutions[0].testScriptLink;
+          exeOutputPath = exeOutputPath.substring(0, exeOutputPath.lastIndexOf('/'));
           chartData.executionOutputPath.push(exeOutputPath);
           chartData = getChartData(result, chartData);
         }
@@ -249,7 +247,7 @@ function parseResult(nexialExecData, /*String*/level) {
 }
 
 function getChartData(result, chartData, /*String*/scriptName) {
-  if (!scriptName || scriptName === null) { scriptName = ''; }
+  if (!scriptName) { scriptName = ''; }
 
   chartData.name.push(scriptName + " / " + result.name);
   chartData.shrinkedLabels.push(shrinkName(scriptName + " / " + result.name));
@@ -258,12 +256,12 @@ function getChartData(result, chartData, /*String*/scriptName) {
   chartData.failCount.push(result.failCount);
   chartData.successPercent.push((result.passCount / result.totalSteps * 100).toFixed(2));
 
-  var duration = (result.endTime - result.startTime) / 1000;
+  let duration = (result.endTime - result.startTime) / 1000;
   chartData.durationInHHMMSS.push(duration.toHHMMSS());
   chartData.duration.push(duration / 60);
   if ((($.parseParams() && $.parseParams().level) || "0") === "0") {
     chartData.totalFailCount = chartData.totalFailCount + result.failCount;
-    chartData.totalDuration  = chartData.totalDuration + (duration * 1000);
+    chartData.totalDuration = chartData.totalDuration + (duration * 1000);
     chartData.totalStepCount = chartData.totalStepCount + result.totalSteps;
   }
   return chartData;
@@ -271,32 +269,32 @@ function getChartData(result, chartData, /*String*/scriptName) {
 
 // load line chart when browser window opened
 function displayChart(domId, chartData, chartConfig, /*String*/level) {
-  var maxCount    = Math.max.apply(Math, chartData.stepCount);
-  var maxDuration = Math.max.apply(Math, chartData.duration);
+  let maxCount = Math.max.apply(Math, chartData.stepCount);
+  let maxDuration = Math.max.apply(Math, chartData.duration);
 
-  var dimensions     = new Dimensions();
-  var keyForDuration = getDimensions(maxDuration, dimensions.Y2_AXIS_GRAPH_DIMENSIONS);
-  var keyForSteps    = getDimensions(maxCount, dimensions.Y1_AXIS_GRAPH_DIMENSIONS);
+  let dimensions = new Dimensions();
+  let keyForDuration = getDimensions(maxDuration, dimensions.Y2_AXIS_GRAPH_DIMENSIONS);
+  let keyForSteps = getDimensions(maxCount, dimensions.Y1_AXIS_GRAPH_DIMENSIONS);
 
-  var chartOption = chartConfig.chartOptions;
+  let chartOption = chartConfig.chartOptions;
 
-  var yAxis1Tick = chartOption.scales.yAxes[0].ticks;
+  let yAxis1Tick = chartOption.scales.yAxes[0].ticks;
   yAxis1Tick.max = keyForSteps !== Infinity ? keyForSteps : MAX_TOTAL_STEPS;
   if (yAxis1Tick.max < 100) {
-    yAxis1Tick.max      = 100;
+    yAxis1Tick.max = 100;
     yAxis1Tick.stepSize = 10;
   } else {
     yAxis1Tick.stepSize =
       dimensions.Y1_AXIS_GRAPH_DIMENSIONS[keyForSteps !== Infinity ? keyForSteps : MAX_TOTAL_STEPS];
   }
 
-  var yAxis2Tick      = chartOption.scales.yAxes[1].ticks;
-  yAxis2Tick.max      = keyForDuration !== Infinity ? keyForDuration : MAX_DURATION;
+  let yAxis2Tick = chartOption.scales.yAxes[1].ticks;
+  yAxis2Tick.max = keyForDuration !== Infinity ? keyForDuration : MAX_DURATION;
   yAxis2Tick.stepSize =
     dimensions.Y2_AXIS_GRAPH_DIMENSIONS[keyForDuration !== Infinity ? keyForDuration : MAX_DURATION];
 
   // for area and line chart in single canvas
-  var legends = {
+  let legends = {
     datasets: chartConfig.datasets,
     labels:   chartData.labels
   };
@@ -307,14 +305,14 @@ function displayChart(domId, chartData, chartConfig, /*String*/level) {
   legends.datasets[3].data = chartData.stepCount;
   legends.datasets[4].data = chartData.duration;
 
-  var chartType = null;
+  let chartType;
   if (level === "0") {
-    chartType           = 'line';
+    chartType = 'line';
     chartOption.onClick = function (c, i) {
-      window.open(window.location.href + '&level=1&index=' + i[0]._index, '_self');
+      window.open(window.location.href + '&level=1&index=' + i[0].index, '_self');
     };
   } else {
-    chartType      = 'bar';
+    chartType = 'bar';
     legends.labels = chartData.name;
     legends.labels = chartData.shrinkedLabels;
 
@@ -330,7 +328,7 @@ function displayChart(domId, chartData, chartConfig, /*String*/level) {
     "mode":              "index",
     "position":          "nearest",
     "titleMarginBottom": 12,
-    "bodyFontColor":     "#ddd",
+    "bodyFontColor":     "#dddddd",
     "bodySpacing":       6,
     "xPadding":          8,
     "borderWidth":       2,
@@ -397,13 +395,13 @@ function Dimensions() {
 }
 
 function getDimensions(dimension, DURATION_DIMENSIONS) {
-  var keys = Object.keys(DURATION_DIMENSIONS);
+  let keys = Object.keys(DURATION_DIMENSIONS);
   return Math.min.apply(Math, keys.filter(function (value) {return value >= dimension; }));
 }
 
-var customTooltips = function (tooltip) {
+let customTooltips = function (tooltip) {
   // Tooltip Element
-  var tooltipEl = document.getElementById('chartjs-tooltip');
+  let tooltipEl = document.getElementById('chartjs-tooltip');
   if (!tooltipEl) {
     tooltipEl           = document.createElement('div');
     tooltipEl.id        = 'chartjs-tooltip';
@@ -425,7 +423,8 @@ var customTooltips = function (tooltip) {
 
   // Set Text
   if (tooltip.body) {
-    var innerHtml = '<thead>';
+    console.log("tooltip.body = " + tooltip.body);
+    let innerHtml = '<thead>';
     (tooltip.title || []).forEach(function (title) {
       innerHtml += '<tr><th colspan="2" style="word-break:break-all">' + title + '</th></tr>';
     });
@@ -433,14 +432,16 @@ var customTooltips = function (tooltip) {
 
     innerHtml += '<tbody>';
     tooltip.body.map(getBody).forEach(function (body, i) {
-      var colors = tooltip.labelColors[i];
-      var style  = 'background:' + colors.backgroundColor + ';' +
+      console.log("body = " + body);
+      console.log("i = " + i);
+      let colors = tooltip.labelColors[i];
+      let style  = 'background:' + colors.backgroundColor + ';' +
                    'border-color:' + colors.borderColor + ';' +
                    'border-width:2px';
-      var span   = '<span class="chartjs-tooltip-key" style="' + style + '"></span>';
+      let span   = '<span class="chartjs-tooltip-key" style="' + style + '"></span>';
 
       innerHtml += '<tr>';
-      var bodyContents = body.toString().split(":");
+      let bodyContents = body.toString().split(":");
       if (i === 4) {
         innerHtml += '<td class="tooltip-label">' + span + 'duration</td>' +
                      '<td>' + (Number(bodyContents[1].trim()) * 60).toHHMMSS() + '</td>';
@@ -455,8 +456,8 @@ var customTooltips = function (tooltip) {
     tooltipEl.querySelector('table').innerHTML = innerHtml;
   }
 
-  var positionY = this._chart.canvas.offsetTop;
-  var positionX = this._chart.canvas.offsetLeft;
+  let positionY = this._chart.canvas.offsetTop;
+  let positionX = this._chart.canvas.offsetLeft;
 
   // Display, position, and set styles for font
   tooltipEl.style.opacity = 1;
@@ -465,7 +466,7 @@ var customTooltips = function (tooltip) {
    chart then the tooltip is displayed towards the left side of the coordinate(point on the graph).
    By default it displays towards right. The below logic specifies whether the tooltip to be displayed right or left.*/
 
-  var chartWidth          = document.getElementById("nexial_result_chart_canvas").clientWidth;
+  let chartWidth          = document.getElementById("nexial_result_chart_canvas").clientWidth;
   tooltipEl.style.left    = positionX +
                             ((chartWidth - tooltip.caretX < MAX_CARETX_VALUE) ? tooltip.caretX - MAX_CARETX_VALUE :
                              tooltip.caretX) + 'px';
@@ -474,7 +475,7 @@ var customTooltips = function (tooltip) {
 };
 
 function createThElement(htmlText, idAttributeValue, classAttributeValue, insertAfterElement) {
-  var th = document.createElement("th");
+  let th = document.createElement("th");
   th.setAttribute("id", idAttributeValue);
   th.setAttribute("class", classAttributeValue);
   $(th).insertAfter(insertAfterElement);
@@ -483,9 +484,9 @@ function createThElement(htmlText, idAttributeValue, classAttributeValue, insert
 
 // load table data when browser window opened
 function displayTable(/*String*/tableId, /*JSONObject*/chartData, summary, /*String*/level) {
-  var table     = $('#' + tableId);
-  var tableBody = $("#tableBody");
-  var rowIndex  = 0;
+  let table     = $('#' + tableId);
+  let tableBody = $("#tableBody");
+  let rowIndex  = 0;
 
   // Replacing the dateTime heading with iteration.
   if (level === "1") {
@@ -497,11 +498,11 @@ function displayTable(/*String*/tableId, /*JSONObject*/chartData, summary, /*Str
 
   tableBody.append(
     $.map(summary, function (result, index) {
-        var linkColumn          = '';
-        var buildNoRow          = '';
-        var totalScriptRow      = '';
-        var dateTimeRowContent  = '<td nowrap="true" class="dateTime">' + chartData.labels[index] + '</td>';
-        var executionOutputLink = '';
+      let linkColumn          = '';
+      let buildNoRow          = '';
+      let totalScriptRow      = '';
+      let dateTimeRowContent  = '<td nowrap="true" class="dateTime">' + chartData.labels[index] + '</td>';
+      let executionOutputLink = '';
         if (level === "0") {
           linkColumn          = '<a href="' + window.location.href + '&level=1&index=' + rowIndex +
                                 '" target="_self" class="drilldownlink" title="drill down">&nbsp;&nbsp;&nbsp;&nbsp;</a>';
@@ -513,9 +514,8 @@ function displayTable(/*String*/tableId, /*JSONObject*/chartData, summary, /*Str
           linkColumn = '<a href="' + chartData.downloadLinks[index] + '" target="_blank" ' +
                        'class="downloadlink" title="download">&nbsp;&nbsp;&nbsp;&nbsp;</a>';
 
-          var iterationName  = chartData.name[index];
-          dateTimeRowContent =
-            '<td nowrap="true" class="dateTime">' + chartData.shrinkedLabels[index] + '</td>';
+          let iterationName  = chartData.name[index];
+          dateTimeRowContent = '<td nowrap="true" class="dateTime">' + chartData.shrinkedLabels[index] + '</td>';
 
           if (iterationName.length > MAX_ITERATION_NAME_LENGTH) {
             dateTimeRowContent = '<td nowrap="true" class="dateTime" title="' + chartData.name[index] + '">' +
@@ -553,12 +553,11 @@ function newSummaryStat(/*String*/title,/*String*/icon, /*String*/value) {
 }
 
 function displayExecutionSummaryStats(divId, chartData) {
-  var div = $('#' + divId);
+  let div = $('#' + divId);
   div.append(newSummaryStat('Average fail steps', 'fas fa-bug', chartData.avgFailCount) +
              newSummaryStat('Average execution time', 'far fa-clock', chartData.avgExecutionTime) +
              newSummaryStat('Average steps executed per run', 'fas fa-tasks', chartData.avgStepCount) +
-             newSummaryStat('Average executions per day', 'far fa-calendar', chartData.avgExecPerDay) +
-             '</div>');
+             newSummaryStat('Average executions per day', 'far fa-calendar', chartData.avgExecPerDay));
   return div;
 }
 
@@ -583,8 +582,8 @@ function calculateExecutionStats(chartData) {
 
   chartData.avgExecPerDay = chartData.dateValues.length;
   chartData.dateValues    = chartData.dateValues.slice().sort();
-  var duplicateCount      = 1;
-  for (var i = 0; i < chartData.dateValues.length - 1; i++) {
+  let duplicateCount      = 1;
+  for (let i = 0; i < chartData.dateValues.length - 1; i++) {
     if (chartData.dateValues[i + 1] !== chartData.dateValues[i]) { duplicateCount = duplicateCount + 1; }
   }
 
